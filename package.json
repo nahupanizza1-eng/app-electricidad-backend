@@ -1,18 +1,13 @@
 {
-  "name": "app",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "service-worker.js",
-  "type": "module",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "node-fetch": "^3.3.2"
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "node-fetch": "^2.6.7"
   }
 }
