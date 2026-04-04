@@ -1,5 +1,5 @@
-import express from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
 
 const app = express();
 
@@ -8,18 +8,25 @@ app.use(express.json());
 
 // Ruta de prueba
 app.get('/', (req, res) => {
-  res.send('Servidor funcionando correctamente 🚀');
+  res.send('Servidor funcionando');
 });
 
-// Ruta para chat (todavía sin IA)
-app.post('/api/chat', (req, res) => {
+// Ruta IA
+app.post('/api/chat', async (req, res) => {
   const { mensaje } = req.body;
 
-  res.json({
-    respuesta: `Recibí tu mensaje: "${mensaje}"`
-  });
+  if (!mensaje) {
+    return res.json({ respuesta: 'No enviaste ningún mensaje.' });
+  }
+
+  // Simulación de IA (podemos mejorar esto después)
+  const respuesta = `Respuesta IA: "${mensaje}"`;
+
+  res.json({ respuesta });
 });
 
-app.listen(3000, () => {
-  console.log('Servidor corriendo en http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log('Servidor corriendo en puerto ' + PORT);
 });
