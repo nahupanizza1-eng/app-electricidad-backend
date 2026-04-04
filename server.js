@@ -42,20 +42,31 @@ app.post('/api/chat', async (req, res) => {
       })
     });
 
-    const data = await response.json();
+    const text = await response.text();
+    console.log("RESPUESTA OPENAI:", text);
 
-    const respuesta = data.choices?.[0]?.message?.content || "No pude responder.";
+    if (!response.ok) {
+      return res.json({ respuesta: "Error de OpenAI: " + text });
+    }
 
-    res.json({ respuesta });
+    let data;
+
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      return res.json({ respuesta: "Error al interpretar respuesta de IA." });
+    }
+
+    if (!data.choices || !data.choices[0]) {
+      return res.json({ respuesta: "Error de IA: respuesta vacía o inválida." });
+    }
+
+    const respuesta = data.choices[0].message.content;
+
+    return res.json({ respuesta });
 
   } catch (error) {
     console.error(error);
-    res.json({ respuesta: "Error al conectar con la IA." });
+    return res.json({ respuesta: "Error al conectar con la IA." });
   }
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log('Servidor corriendo en puerto ' + PORT);
 });
