@@ -69,4 +69,9 @@ app.post('/api/chat', async (req, res) => {
     console.error(error);
     return res.json({ respuesta: "Error al conectar con la IA." });
   }
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log('Servidor corriendo en puerto ' + PORT);
 });
