@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
   res.send('Servidor funcionando');
 });
 
-// Ruta IA REAL
+// Ruta IA
 app.post('/api/chat', async (req, res) => {
   const { mensaje } = req.body;
 
@@ -69,6 +69,7 @@ app.post('/api/chat', async (req, res) => {
     console.error(error);
     return res.json({ respuesta: "Error al conectar con la IA." });
   }
+});
 
 const PORT = process.env.PORT || 3000;
 
