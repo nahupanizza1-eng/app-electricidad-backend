@@ -50,9 +50,9 @@ const respuesta = data.output?.[0]?.content?.[0]?.text || "No pude responder.";
 
 return res.json({ respuesta });
 
-  } catch (error) {
-    console.error(error);
-    return res.json({ respuesta: "Error al conectar con la IA." });
+} catch (error) {
+  console.error("ERROR REAL:", error);
+  return res.json({ respuesta: "ERROR: " + error.message });
   }
 });
 
