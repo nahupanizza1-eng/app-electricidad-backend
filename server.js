@@ -1,7 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch');
-
 const app = express();
 
 app.use(cors({ origin: '*' }));
@@ -21,49 +19,36 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: "Sos un electricista profesional experto en normativa AEA Argentina. Respondé claro, técnico y práctico."
-          },
-          {
-            role: "user",
-            content: mensaje
-          }
-        ]
-      })
-    });
+    const response = await fetch('https://api.openai.com/v1/responses', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    model: "gpt-4o-mini",
+    input: `Sos un electricista profesional experto en normativa AEA Argentina. Respondé claro, técnico y práctico.\n\nConsulta: ${mensaje}`
+  })
+});
 
-    const text = await response.text();
-    console.log("RESPUESTA OPENAI:", text);
+const text = await response.text();
+console.log("RESPUESTA OPENAI:", text);
 
-    if (!response.ok) {
-      return res.json({ respuesta: "Error de OpenAI: " + text });
-    }
+if (!response.ok) {
+  return res.json({ respuesta: "Error de OpenAI: " + text });
+}
 
-    let data;
+let data;
 
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      return res.json({ respuesta: "Error al interpretar respuesta de IA." });
-    }
+try {
+  data = JSON.parse(text);
+} catch (e) {
+  return res.json({ respuesta: "Error al interpretar respuesta de IA." });
+}
 
-    if (!data.choices || !data.choices[0]) {
-      return res.json({ respuesta: "Error de IA: respuesta vacía o inválida." });
-    }
+const respuesta = data.output?.[0]?.content?.[0]?.text || "No pude responder.";
 
-    const respuesta = data.choices[0].message.content;
-
-    return res.json({ respuesta });
+return res.json({ respuesta });
 
   } catch (error) {
     console.error(error);
