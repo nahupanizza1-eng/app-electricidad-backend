@@ -6,8 +6,8 @@ app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 // Ruta de prueba
-app.get('/', (req, res) => {
-  res.send('Servidor funcionando');
+app.get('/test', (req, res) => {
+  res.send('Servidor funcionando OK');
 });
 
 // Ruta IA
